@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --inspect server.js"
   },
-  "author": "",
+  "author": "JiaLin Li",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.7",
