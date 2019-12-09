@@ -7,6 +7,8 @@ const JWT = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const modUsers = require('../model/user');
 
+const ACCESS_BLOCKER = require('../middlewares/access-blocker');
+
 ROUTE
   .post('/login', (req, res, next) => {
     const BODY = req.body;
@@ -97,7 +99,9 @@ ROUTE
 
 
   })
-  .get('/', (req, res, next) => {
+
+  // ---- deprecated ----
+  .get('/', ACCESS_BLOCKER, (req, res, next) => {
     modUsers.find().exec()
       .then((result) => {
         if (result) {
@@ -118,7 +122,7 @@ ROUTE
       })
       .catch();
   })
-  .delete('/:uID', (req, res, next) => {
+  .delete('/:uID', ACCESS_BLOCKER, (req, res, next) => {
     const uID = req.params['uID'];
 
     modUsers.findByIdAndRemove({ _id: uID }).exec()

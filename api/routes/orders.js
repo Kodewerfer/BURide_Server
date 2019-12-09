@@ -7,6 +7,7 @@ const modOrders = require('../model/orders');
 const modOffers = require('../model/offers');
 
 const checkAuth = require('../middlewares/auth-check');
+const ACCESS_BLOCKER = require('../middlewares/access-blocker');
 
 ROUTE
   // posting a new order
@@ -112,7 +113,7 @@ ROUTE
 
   // ---- deprecated ---
   // deleting a specific order
-  .delete('/order/:oId', checkAuth, (req, res, next) => {
+  .delete('/order/:oId', ACCESS_BLOCKER, checkAuth, (req, res, next) => {
     let oId = req.params['oId'];
 
     // if()
@@ -157,7 +158,7 @@ ROUTE
   })
 
   // getting a specific order
-  .get('/order/:oId', checkAuth, (req, res, next) => {
+  .get('/order/:oId', ACCESS_BLOCKER, checkAuth, (req, res, next) => {
     let oId = req.params['oId']
 
     modOrders.findOne({ _id: oId }).exec()
@@ -177,7 +178,7 @@ ROUTE
   })
 
   // listing all orders
-  .get('/', checkAuth, (req, res, next) => {
+  .get('/', ACCESS_BLOCKER, checkAuth, (req, res, next) => {
 
     modOrders.find().populate('offer').populate({ path: 'user', select: 'username _id' }).exec()
       .then(result => {
@@ -202,7 +203,7 @@ ROUTE
       .catch(error => res.status(500).json(error));
   })
 
-  .patch('/order/:oId', checkAuth, (req, res, next) => {
+  .patch('/order/:oId', ACCESS_BLOCKER, checkAuth, (req, res, next) => {
     let oId = req.params['oId'];
     let body = req.body;
 

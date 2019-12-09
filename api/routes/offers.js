@@ -9,6 +9,7 @@ const modOffers = require('../model/offers');
 const modOrders = require('../model/orders');
 
 const checkAuth = require('../middlewares/auth-check');
+const ACCESS_BLOCKER = require('../middlewares/access-blocker');
 
 
 // ** TODO : standar messages **
@@ -39,7 +40,7 @@ ROUTE
 
   })
   // listing all offers
-  .get('/', (req, res, next) => {
+  .get('/', checkAuth, (req, res, next) => {
     modOffers.find().populate({ path: 'user', select: "_id username" }).exec()
       .then(result => {
         if (result) {
@@ -104,6 +105,7 @@ ROUTE
       })
       .catch(error => res.status(500).json(error));
   })
+
   // getting a specific offer
   .get('/offer/:oId', checkAuth, (req, res, next) => {
     let oId = req.params['oId']
@@ -123,6 +125,7 @@ ROUTE
       .catch(error => res.status(500).json(error));
 
   })
+
   // deleting a specific offer *** Also delete accociated orders ***
   .delete('/offer/:oId', checkAuth, (req, res, next) => {
     let oId = req.params['oId'];
@@ -142,8 +145,10 @@ ROUTE
       });
 
   })
+
+  // ---- deprecated ----
   // modify offers
-  .patch('/offer/:oId', checkAuth, (req, res, next) => {
+  .patch('/offer/:oId', ACCESS_BLOCKER, checkAuth, (req, res, next) => {
     let oId = req.params['oId'];
     let BODY = req.body;
 
