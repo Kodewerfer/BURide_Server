@@ -59,10 +59,11 @@ ROUTE
       });
   })
 
-  // listing all orders
-  .get('/', checkAuth, (req, res, next) => {
+  // getting a specific order *Base on it's offer*
+  .get('/offer/:oId', checkAuth, (req, res, next) => {
+    let oId = req.params['oId']
 
-    modOrders.find().populate('offer').populate({ path: 'user', select: 'username _id' }).exec()
+    modOrders.find({ offer: oId }).populate({ path: 'user' }).exec()
       .then(result => {
         if (result) {
 
@@ -76,29 +77,6 @@ ROUTE
           }
 
           res.status(200).json(response);
-        } else {
-          res.status(404).json({
-            message: 'no entry found'
-          });
-        }
-      })
-      .catch(error => res.status(500).json(error));
-  })
-
-  // getting a specific order
-  .get('/order/:oId', (req, res, next) => {
-    let oId = req.params['oId']
-
-    modOrders.findOne({ _id: oId }).exec()
-      .then(result => {
-        if (result) {
-
-          const response = {
-            result: result._doc
-          }
-          res.status(200).json(response);
-        } else {
-          res.status(404).json('no entry');
         }
       })
       .catch(error => res.status(500).json(error));
@@ -132,7 +110,7 @@ ROUTE
 
   })
 
-
+  // ---- deprecated ---
   // deleting a specific order
   .delete('/order/:oId', checkAuth, (req, res, next) => {
     let oId = req.params['oId'];
@@ -178,7 +156,53 @@ ROUTE
       });
   })
 
-  .patch('/order/:oId', (req, res, next) => {
+  // getting a specific order
+  .get('/order/:oId', checkAuth, (req, res, next) => {
+    let oId = req.params['oId']
+
+    modOrders.findOne({ _id: oId }).exec()
+      .then(result => {
+        if (result) {
+
+          const response = {
+            result: result._doc
+          }
+          res.status(200).json(response);
+        } else {
+          res.status(404).json('no entry');
+        }
+      })
+      .catch(error => res.status(500).json(error));
+
+  })
+
+  // listing all orders
+  .get('/', checkAuth, (req, res, next) => {
+
+    modOrders.find().populate('offer').populate({ path: 'user', select: 'username _id' }).exec()
+      .then(result => {
+        if (result) {
+
+          const response = {
+            count: result.length,
+            result: result.map(entry => {
+              return {
+                ...entry._doc
+              }
+            })
+          }
+
+          res.status(200).json(response);
+        } else {
+          res.status(404).json({
+            message: 'no entry found'
+          });
+        }
+      })
+      .catch(error => res.status(500).json(error));
+  })
+
+  .patch('/order/:oId', checkAuth, (req, res, next) => {
     let oId = req.params['oId'];
     let body = req.body;
 
