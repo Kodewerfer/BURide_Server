@@ -57,6 +57,10 @@ APP.use('/offers', offerRoute);
 APP.use('/orders', orderRoute);
 APP.use('/user', userRoute);
 
+APP.use('/server', (req, res, next) => {
+  res.status(200).json('Server is running...');
+});
+
 // error handling
 APP.use((req, res, next) => {
   // reachs this middle ware means page not found
