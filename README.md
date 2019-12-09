@@ -4,6 +4,9 @@ for CS557.
 BU's ride share(car pool) markup, server side. 
 Handles front-end requests & database CRUD
 
+## Port
+Listening on port 3004
+
 
 
 ## Avaliable scripts
@@ -19,6 +22,10 @@ Run production version
 
 
 ## Environmental settup
+
+*BUR_PORT*
+
+For port listening.
 
 This program utilizes mongoDB Atlas and Json Web Token.
 
