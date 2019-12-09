@@ -60,6 +60,50 @@ ROUTE
       })
       .catch(error => res.status(500).json(error));
   })
+  // Listing *the user's* offer
+  .get('/own', checkAuth, (req, res, next) => {
+    modOffers.find({ user: req.tokenData.id }).populate({ path: 'user', select: "_id username" }).exec()
+      .then(result => {
+        if (result) {
+
+          const response = {
+            count: result.length,
+            result: result.map(entry => {
+              return {
+                ...entry._doc
+              }
+            })
+          }
+
+          res.status(200).json(response);
+        }
+      })
+      .catch(error => res.status(500).json(error));
+  })
+  // Listing *all other's* offer
+  .get('/others', checkAuth, (req, res, next) => {
+    modOffers.find({
+      user: {
+        $ne: req.tokenData.id
+      }
+    }).populate({ path: 'user', select: "_id username" }).exec()
+      .then(result => {
+        if (result) {
+
+          const response = {
+            count: result.length,
+            result: result.map(entry => {
+              return {
+                ...entry._doc
+              }
+            })
+          }
+
+          res.status(200).json(response);
+        }
+      })
+      .catch(error => res.status(500).json(error));
+  })
   // getting a specific offer
   .get('/offer/:oId', checkAuth, (req, res, next) => {
     let oId = req.params['oId']
