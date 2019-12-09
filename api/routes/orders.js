@@ -111,9 +111,8 @@ ROUTE
 
   })
 
-  // ---- deprecated ---
   // deleting a specific order
-  .delete('/order/:oId', ACCESS_BLOCKER, checkAuth, (req, res, next) => {
+  .delete('/order/:oId', checkAuth, (req, res, next) => {
     let oId = req.params['oId'];
 
     // if()
@@ -158,7 +157,7 @@ ROUTE
   })
 
   // getting a specific order
-  .get('/order/:oId', ACCESS_BLOCKER, checkAuth, (req, res, next) => {
+  .get('/order/:oId', checkAuth, (req, res, next) => {
     let oId = req.params['oId']
 
     modOrders.findOne({ _id: oId }).exec()
@@ -177,6 +176,7 @@ ROUTE
 
   })
 
+  // ---- deprecated ---
   // listing all orders
   .get('/', ACCESS_BLOCKER, checkAuth, (req, res, next) => {
 
