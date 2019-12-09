@@ -1,7 +1,7 @@
 # BURide
 
 for CS557.
-BU's ride share(car pool) markup, server side. 
+Restful API node server, BU's ride share(car pool) mockup.
 Handles front-end requests & database CRUD
 
 ## Port
