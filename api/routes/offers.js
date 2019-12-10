@@ -25,6 +25,7 @@ ROUTE
       "date": BODY.date,
       "time": BODY.time,
       "seats": BODY.seats,
+      "price": BODY.price,
       "user": req.tokenData.id
     });
 
@@ -38,28 +39,6 @@ ROUTE
         res.status(500).json(error)
       });
 
-  })
-  // listing all offers
-  .get('/', checkAuth, (req, res, next) => {
-    modOffers.find().populate({ path: 'user', select: "_id username" }).exec()
-      .then(result => {
-        if (result) {
-
-          const response = {
-            count: result.length,
-            result: result.map(entry => {
-              return {
-                ...entry._doc
-              }
-            })
-          }
-
-          res.status(200).json(response);
-        } else {
-          res.status(404).json('no entry');
-        }
-      })
-      .catch(error => res.status(500).json(error));
   })
   // Listing *the user's* offer
   .get('/own', checkAuth, (req, res, next) => {
@@ -147,6 +126,28 @@ ROUTE
   })
 
   // ---- deprecated ----
+  // listing all offers
+  .get('/', ACCESS_BLOCKER, checkAuth, (req, res, next) => {
+    modOffers.find().populate({ path: 'user', select: "_id username" }).exec()
+      .then(result => {
+        if (result) {
+
+          const response = {
+            count: result.length,
+            result: result.map(entry => {
+              return {
+                ...entry._doc
+              }
+            })
+          }
+
+          res.status(200).json(response);
+        } else {
+          res.status(404).json('no entry');
+        }
+      })
+      .catch(error => res.status(500).json(error));
+  })
   // modify offers
   .patch('/offer/:oId', ACCESS_BLOCKER, checkAuth, (req, res, next) => {
     let oId = req.params['oId'];
