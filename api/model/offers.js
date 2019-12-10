@@ -7,6 +7,7 @@ const offerSchema = mongoose.Schema({
   date: { type: String, required: true },
   time: { type: String, required: true },
   seats: { type: Number, default: 1 },
+  price: { type: Number, default: 15 },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
