@@ -16,7 +16,7 @@ ROUTE
     modUsers.findOne({ "username": BODY.username }).exec()
       .then(user => {
         if (!user) {
-          return res.status(404).json({
+          return res.status(401).json({
             message: 'No User'
           });
         }
@@ -38,7 +38,7 @@ ROUTE
             },
               process.env.BUR_PRV_KEY,
               {
-                "expiresIn": "4h"
+                "expiresIn": "1h"
               });
 
             return res.status(200).json({
@@ -98,7 +98,7 @@ ROUTE
       });
 
 
-  })
+  })  
 
   // ---- deprecated ----
   .get('/', ACCESS_BLOCKER, (req, res, next) => {
